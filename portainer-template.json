@@ -1,0 +1,22 @@
+[
+    {
+        "type": "stack",
+        "title": "Danswer",
+        "description": "AI Assistant connected to your company's docs, apps, and people",
+        "note": "Deploys Danswer, Postgres, Vespa, LLMs",
+        "categories": ["AI"],
+        "platform": "linux",
+        "logo": "https://www.danswer.ai/black-logo.png",
+        "repository": {
+          "url": "https://github.com/eremeye/ai-workshop-infra",
+          "stackfile": "stacks/danswer/danswer-stack.yml"
+        },
+        "env": [
+          {
+            "name": "PROJECT_NAME",
+            "label": "Project name",
+            "description": "Project name"
+          }
+        ]
+      }
+]
