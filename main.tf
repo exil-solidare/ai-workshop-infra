@@ -127,6 +127,7 @@ resource "hcloud_server" "master" {
   provisioner "remote-exec" {
     inline = [
       "docker swarm init --advertise-addr ${var.server_network_ip}",
+      "docker network create --scope=swarm --attachable -d overlay public_network",
       "docker stack deploy -c /tmp/portainer-agent-stack.yml portainer"
     ]
   }
