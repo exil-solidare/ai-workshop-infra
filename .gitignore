@@ -36,3 +36,5 @@ terraform.rc
 terraform.tfvars
 .terraform.lock.hcl
 .DS_Store
+
+.env
