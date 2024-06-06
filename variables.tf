@@ -40,7 +40,7 @@ variable "hcloud_location_name" {
 variable "hcloud_server_type_name" {
   description = "Type of the Hetzner Cloud server"
   type        = string
-  default     = "cx41"
+  default     = "cx11"
 }
 
 variable "network_ip_range" {
@@ -58,10 +58,4 @@ variable "subnet_ip_range" {
 variable "server_network_ip" {
   description = "IP address for the server in the network"
   default     = "10.0.1.2"
-}
-
-variable "reverse_proxy" {
-  type    = string
-  default = null  # Default to null, meaning no proxy server is added
-  description = "Type of proxy server to deploy: 'traefik' or null for none"
 }
