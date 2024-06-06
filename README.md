@@ -7,6 +7,7 @@ This project contains a Terraform script for setting up a server on Hetzner Clou
 - [Terraform](https://www.terraform.io/downloads.html) >= 1.7.5 installed
 - Hetzner Cloud Token
 - SSH Private Key
+– SSH Key have to be added to Hetzner Cloud Project
 
 ## Steps
 

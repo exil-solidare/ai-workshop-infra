@@ -14,11 +14,6 @@ variable "ssh_pub_key_path" {
   type        = string
 }
 
-variable "ssh_priv_key_path" {
-  description = "Path to the private SSH key file"
-  type        = string
-}
-
 variable "project_name" {
   description = "The name of the project"
   type        = string

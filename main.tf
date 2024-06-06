@@ -18,13 +18,12 @@ data "hcloud_location" "location" {
   name = var.hcloud_location_name
 }
 
-provider "hcloud" {
-  token = var.hcloud_token
+data "hcloud_ssh_key" "existing_ssh_key" {
+  name = var.ssh_key_name
 }
 
-resource "hcloud_ssh_key" "ssh_key1" {
-  name      = var.ssh_key_name
-  public_key = file(var.ssh_pub_key_path)
+provider "hcloud" {
+  token = var.hcloud_token
 }
 
 resource "hcloud_network" "network1" {
@@ -88,7 +87,7 @@ resource "hcloud_server" "master" {
   server_type = data.hcloud_server_type.server_type.name
   image       = data.hcloud_image.image.name
   location    = data.hcloud_location.location.name
-  ssh_keys    = [hcloud_ssh_key.ssh_key1.name]
+  ssh_keys    = [data.hcloud_ssh_key.existing_ssh_key.id]
   firewall_ids = [hcloud_firewall.firewall1.id]
 
   user_data = <<-EOT
