@@ -82,18 +82,13 @@ resource "hcloud_firewall" "firewall1" {
   }
 }
 
-resource "hcloud_volume" "example_volume" {
+resource "hcloud_volume" "volume1" {
   count      = var.create_volume ? 1 : 0
   name       = "${var.project_name}-volume"
   size       = 10 # Size in GB
   location   = data.hcloud_location.location.name
   format     = "ext4"
   automount  = true
-}
-
-resource "hcloud_server_attach_volume" "attach_volume" {
-  server_id = hcloud_server.master.id
-  volume_id = hcloud_volume.example_volume.id
 }
 
 resource "hcloud_server" "master" {
