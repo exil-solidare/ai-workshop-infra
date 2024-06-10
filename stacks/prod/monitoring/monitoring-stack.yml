@@ -55,6 +55,7 @@ services:
         target: /etc/prometheus
     networks:
       - net
+      - monitoring
 
   # https://github.com/swarmstack/loki
   # https://github.com/grafana/loki/issues/6648
@@ -165,4 +166,6 @@ networks:
   net:
     driver: overlay
   public_network:
+    external: true
+  monitoring:
     external: true

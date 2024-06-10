@@ -118,7 +118,13 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
 
-
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@relational_db:5432/postgres?sslmode=disable
+    networks:
+      - monitoring
+      - default
   # This container name cannot have an underscore in it due to Vespa expectations of the URL
   index:
     image: vespaengine/vespa:8.277.17
@@ -133,4 +139,6 @@ volumes:
 
 networks:
   public_network:
+    external: true
+  monitoring:
     external: true
