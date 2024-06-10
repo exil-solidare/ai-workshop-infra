@@ -60,7 +60,7 @@ services:
 
 
   web_server:
-    image: conlab/danswer-web-server:latest
+    image: danswer/danswer-web-server:latest
     depends_on:
       - api_server
     environment:
