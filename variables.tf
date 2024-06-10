@@ -59,3 +59,9 @@ variable "server_network_ip" {
   description = "IP address for the server in the network"
   default     = "10.0.1.2"
 }
+
+variable "create_volume" {
+  description = "Flag to control whether the volume should be created"
+  type        = bool
+  default     = false
+}

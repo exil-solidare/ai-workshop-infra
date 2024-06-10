@@ -5,6 +5,7 @@ ssh_pub_key_path  = "/path/to/your/public/key.pub"
 # You can override the default values here if needed
 #
 # project_name = "default"
+# create_volume = "false"
 # hcloud_image_name = "ubuntu-24.04"
 # hcloud_location_name = "nbg1"
 # hcloud_server_type_name = "cx21"
