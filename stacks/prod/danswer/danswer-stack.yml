@@ -128,9 +128,11 @@ services:
   # This container name cannot have an underscore in it due to Vespa expectations of the URL
   index:
     image: vespaengine/vespa:8.277.17
-
     volumes:
       - vespa_volume:/opt/vespa/var
+    networks:
+      - monitoring
+      - default
 
 volumes:
   db_volume:

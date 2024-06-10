@@ -29,3 +29,10 @@ scrape_configs:
       type: 'A'
       port: 9187
 
+  - job_name: 'vespa'
+    metrics_path: '/prometheus/v1/values'
+    dns_sd_configs:
+    - names:
+        - tasks.index'
+      type: 'A'
+      port: 19092
