@@ -2,7 +2,7 @@ hcloud_token = "<YOUR-HCLOUD-TOKEN>"
 ssh_key_name = "<YOUR-KEY-NAME>"
 ssh_pub_key_path  = "/path/to/your/public/key.pub"
 #
-# You can override the default values here if needed
+## You can override the default values here if needed
 #
 # project_name = "default"
 # create_volume = "false"
@@ -13,3 +13,28 @@ ssh_pub_key_path  = "/path/to/your/public/key.pub"
 # subnet_ip_range = "10.1.1.0/24"
 # server_network_ip = "10.0.1.2"
 # reverse_proxy = "traefik"
+#
+## firewall rules
+firewall_rules = [
+  {
+    protocol   = "tcp"
+    port       = "22"
+    source_ips = ["0.0.0.0/0", "::/0"]
+  },
+  {
+    protocol   = "tcp"
+    port       = "80"
+    source_ips = ["0.0.0.0/0", "::/0"]
+  },
+  {
+    protocol   = "tcp"
+    port       = "443"
+    source_ips = ["0.0.0.0/0", "::/0"]
+  },
+  {
+    protocol   = "tcp"
+    port       = "9443"
+    source_ips = ["0.0.0.0/0", "::/0"]
+  }
+]
+

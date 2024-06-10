@@ -65,3 +65,13 @@ variable "create_volume" {
   type        = bool
   default     = false
 }
+
+variable "firewall_rules" {
+  description = "List of firewall rules"
+  type = list(object({
+    protocol   = string
+    port       = string
+    source_ips = list(string)
+  }))
+  default = []
+}

@@ -41,44 +41,15 @@ resource "hcloud_network_subnet" "subnet1" {
 resource "hcloud_firewall" "firewall1" {
   name = "${var.project_name}-firewall"
 
-  rule {
-    direction = "in"
-    protocol  = "tcp"
-    port      = "22"
-    source_ips = [
-      "0.0.0.0/0",
-      "::/0",
-    ]
-  }
+  dynamic "rule" {
+    for_each = var.firewall_rules
 
-  rule {
-    direction = "in"
-    protocol  = "tcp"
-    port      = "80"
-    source_ips = [
-      "0.0.0.0/0",
-      "::/0",
-    ]
-  }
-
-  rule {
-    direction = "in"
-    protocol  = "tcp"
-    port      = "443"
-    source_ips = [
-      "0.0.0.0/0",
-      "::/0",
-    ]
-  }
-
-  rule {
-    direction = "in"
-    protocol  = "tcp"
-    port      = "9443"
-    source_ips = [
-      "0.0.0.0/0",
-      "::/0",
-    ]
+    content {
+      direction = "in"  # Assuming all rules are inbound
+      protocol  = rule.value.protocol
+      port      = rule.value.port
+      source_ips = rule.value.source_ips
+    }
   }
 }
 
