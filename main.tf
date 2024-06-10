@@ -57,9 +57,9 @@ resource "hcloud_volume" "volume1" {
   count      = var.create_volume ? 1 : 0
   name       = "${var.project_name}-volume"
   size       = 10 # Size in GB
-  location   = data.hcloud_location.location.name
   format     = "ext4"
   automount  = true
+  server_id  = hcloud_server.master.id
 }
 
 resource "hcloud_server" "master" {
