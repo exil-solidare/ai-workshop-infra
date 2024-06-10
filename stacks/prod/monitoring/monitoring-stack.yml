@@ -27,7 +27,7 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
     networks:
       - net
-      - cloudflare
+      - public_network
     expose:
       - "3000"
 
@@ -164,5 +164,5 @@ volumes:
 networks:
   net:
     driver: overlay
-  cloudflare:
+  public_network:
     external: true
