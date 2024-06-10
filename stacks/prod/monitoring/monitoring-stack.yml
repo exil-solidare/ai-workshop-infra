@@ -1,0 +1,168 @@
+version: "3.8"
+
+services:
+  grafana:
+    image: grafana/grafana:9.5.2
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role == manager
+          - node.labels.monitoring == true
+    volumes:
+      - type: volume
+        source: grafana-data
+        target: /var/lib/grafana
+      - type: bind
+        source: ./grafana/provisioning
+        target: /etc/grafana/provisioning
+      - type: bind
+        source: ./grafana/dashboards
+        target: /etc/grafana/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - net
+      - cloudflare
+    expose:
+      - "3000"
+
+  prometheus:
+    image: prom/prometheus:v2.44.0
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--log.level=error'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=7d'
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role == manager
+          - node.labels.monitoring == true
+    volumes:
+      - type: volume
+        source: prometheus-data
+        target: /prometheus
+      - type: bind
+        source: ./prometheus
+        target: /etc/prometheus
+    networks:
+      - net
+
+  # https://github.com/swarmstack/loki
+  # https://github.com/grafana/loki/issues/6648
+  loki:
+    image: grafana/loki:2.9.5
+    command: >-
+     -config.file=/etc/loki/loki-config.yaml
+     -boltdb.shipper.compactor.ring.instance-addr=127.0.0.1
+     -distributor.ring.instance-addr=127.0.0.1
+     -frontend.instance-addr=127.0.0.1
+     -index-gateway.ring.instance-addr=127.0.0.1
+     -ingester.lifecycler.addr=127.0.0.1
+     -query-scheduler.ring.instance-addr=127.0.0.1
+     -ruler.ring.instance-addr=127.0.0.1
+    ports:
+      - target: 3100
+        published: 3100
+        protocol: tcp
+        mode: ingress
+    volumes:
+      - type: volume
+        source: loki-data
+        target: /loki
+      - type: bind
+        source: ./loki/loki-config.yaml
+        target: /etc/loki/loki-config.yaml
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role == manager
+          - node.labels.monitoring == true
+    networks:
+      - net
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.0
+    command: -logtostderr -docker_only
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+    volumes:
+      - type: bind
+        source: /
+        target: /rootfs
+        read_only: true
+      - type: bind
+        source: /var/run
+        target: /var/run
+        read_only: true
+      - type: bind
+        source: /sys
+        target: /sys
+        read_only: true
+      - type: bind
+        source: /var/lib/docker
+        target: /var/lib/docker
+        read_only: true
+      - type: bind
+        source: /dev/disk
+        target: /dev/disk
+        read_only: true                        
+    networks:
+      - net
+
+  node-exporter:
+    image: prom/node-exporter:v1.5.0
+    command:
+      - '--path.sysfs=/host/sys'
+      - '--path.procfs=/host/proc'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+      - '--no-collector.ipvs'
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+    volumes:
+      - type: bind
+        source: /
+        target: /rootfs
+        read_only: true
+      - type: bind
+        source: /proc
+        target: /host/proc
+        read_only: true
+      - type: bind
+        source: /sys
+        target: /host/sys
+        read_only: true
+    networks:
+      - net
+
+volumes:
+  grafana-data:
+  prometheus-data:
+  loki-data:
+
+networks:
+  net:
+    driver: overlay
+  cloudflare:
+    external: true
