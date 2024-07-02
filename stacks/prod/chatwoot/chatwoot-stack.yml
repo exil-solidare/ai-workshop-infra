@@ -44,7 +44,7 @@ services:
     <<: *chatwoot
     networks:
       - default
-      - agentbot
+      #- agentbot
     command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq.yml"]
 
   postgres:
@@ -71,5 +71,5 @@ volumes:
 networks:
   public_network:
     external: true
-  agentbot:
-    external: true
+  #agentbot:
+  #  external: true
