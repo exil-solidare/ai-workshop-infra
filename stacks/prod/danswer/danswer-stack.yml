@@ -17,7 +17,7 @@ services:
       - public_network
 
   api_server:
-    image: conlab/danswer-backend:latest
+    image: danswer/danswer-backend:v0.5.26
     command: >
       /bin/sh -c "alembic upgrade head &&
       echo \"Starting Danswer Api Server\" &&
@@ -42,7 +42,7 @@ services:
       - "traefik.http.services.api.loadbalancer.server.port=8080"
 
   background:
-    image: conlab/danswer-backend:latest
+    image: danswer/danswer-backend:v0.5.26
     command: /usr/bin/supervisord
     depends_on:
       - relational_db
@@ -60,7 +60,7 @@ services:
 
 
   web_server:
-    image: conlab/danswer-web-server:latest
+    image: danswer/danswer-web-server:v0.5.26
     depends_on:
       - api_server
     environment:
@@ -74,7 +74,7 @@ services:
 
 
   inference_model_server:
-    image: conlab/danswer-model-server:latest
+    image: danswer/danswer-model-server:v0.5.26
     command: >
       /bin/sh -c "if [ \"${DISABLE_MODEL_SERVER:-false}\" = \"True\" ]; then
         echo 'Skipping service...';
@@ -92,7 +92,7 @@ services:
 
 
   indexing_model_server:
-    image: conlab/danswer-model-server:latest
+    image: danswer/danswer-model-server:v0.5.26
     command: >
       /bin/sh -c "if [ \"${DISABLE_MODEL_SERVER:-false}\" = \"True\" ]; then
         echo 'Skipping service...';
