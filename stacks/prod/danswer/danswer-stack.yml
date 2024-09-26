@@ -27,6 +27,7 @@ services:
       - index
       - inference_model_server
     environment:
+      - DISABLE_AUTH
       - AUTH_TYPE
       - POSTGRES_HOST=relational_db
       - POSTGRES_USER
